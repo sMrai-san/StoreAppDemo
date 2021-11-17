@@ -1,0 +1,155 @@
+﻿@model StoreApp.Data.DatabaseModel.Products
+
+@{
+    ViewData["Title"] = "Update Product";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+ <div class="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Dashboard","Admin")">Dashboard</a></li>
+                            <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("Products","Admin")">Products</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                        </ol>
+                    </nav>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                <h6 class="m-0 font-weight-bold text-primary">@ViewData["Title"]</h6>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    @using(Html.BeginForm("UpdateProduct", "Admin", FormMethod.Post, new {enctype = "multipart/form-data" }))
+                    {
+                        @Html.HiddenFor(m=>m.ProductId)              
+
+                        <div class="form-group">
+                            <label class="control-label">Product Name</label>
+                            @Html.TextBoxFor(m=>m.ProductName, new { @class="form-control", placeholder="Enter product name", required="required", autofocus="autofocus"})
+                            @Html.ValidationMessageFor(m=>m.ProductImage, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Quantity</label>
+                            @Html.TextBoxFor(m=>m.Quantity, new { @class="form-control", placeholder="Enter quantity", required="required"})
+                            @Html.ValidationMessageFor(m=>m.Quantity, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Price</label>
+                            @Html.TextBoxFor(m=>m.Price, new { @class="form-control", placeholder="Enter price", required="required"})
+                            @Html.ValidationMessageFor(m=>m.Price, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Description</label>
+                            @Html.TextAreaFor(m=>m.Description, new { @class="form-control", placeholder="Enter description", required="required"})
+                            @Html.ValidationMessageFor(m=>m.Description, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Image</label>
+                            @*@Html.TextBoxFor(m=>m.ProductImage, new { @class="form-control", placeholder="Enter image link"})
+                            @Html.ValidationMessageFor(m=>m.ProductImage, "", new { @class="text-danger"})*@
+                            <input asp-for="ProductImage" type="file" name="imageFile" id="imageFile" style="width: 100%;" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Category</label>
+                            @Html.DropDownListFor(model => model.CategoryId, ViewBag.CategoriesDD as SelectList, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.CategoryId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Active</label>
+                            @Html.CheckBoxFor(m=>m.IsActive)
+                            @Html.ValidationMessageFor(m=>m.IsActive, "", new { @class="text-danger"})
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Featured</label>
+                            @Html.CheckBoxFor(m => m.IsFeatured)
+                            @Html.ValidationMessageFor(m => m.IsFeatured, "", new { @class = "text-danger" })
+                        </div>
+
+                        <input type="button" onclick="window.history.back()" class="btn btn-danger" value="Cancel" />
+                        <input type="submit" class="btn btn-primary" value="Save" />
+                    }
+                    </div>
+                </div>
+</div>
+
+
+@*<h4>Products</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductImage" class="control-label"></label>
+                <input asp-for="ProductImage" class="form-control" />
+                <span asp-validation-for="ProductImage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsFeatured" class="control-label"></label>
+                <input asp-for="IsFeatured" class="form-control" />
+                <span asp-validation-for="IsFeatured" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label"></label>
+                <input asp-for="IsActive" class="form-control" />
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsDeleted" class="control-label"></label>
+                <input asp-for="IsDeleted" class="form-control" />
+                <span asp-validation-for="IsDeleted" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+

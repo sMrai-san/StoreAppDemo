@@ -1,0 +1,169 @@
+﻿@using StoreApp.Models.Cart
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@{ 
+    var currentCart = new List<ShoppingCart>();
+    decimal totalSum = 0;
+    if (!String.IsNullOrEmpty(Context.Session.GetString("total")))
+    {
+        totalSum = Convert.ToDecimal(Context.Session.GetString("total"));
+    }
+
+    if (Context.Session.GetString("cart") != null)
+    {
+        currentCart = JsonConvert.DeserializeObject<List<ShoppingCart>>(Context.Session.GetString("cart"));
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - StoreApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/storeMainLayout.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <div class="row align-items-start">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="storeLogo">
+                    <h1><a href="@Url.Action("Index","Home")">Online <span>Store</span></a></h1>
+                    <p>Store Example</p>
+                </div>
+            </div>
+            @*<div class="col-md-6 col-sm-6 col-xs-6">
+                <div class="account">
+                    <ul>
+                        <li>
+                            <div class="d-none d-sm-block">
+                                <h4><a>Call</a></h4>
+                                <p>+3580000000</p>
+                            </div>
+                            <div class="d-block d-sm-none">
+                                <p>+3580000000</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>*@
+            <div class="col-md-6 col-sm-6 col-xs-6 mt-2" style="text-align: right;">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#" style=""><i class="fas fa-shopping-cart fa-2x" style="color: #007bff;"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left dropdown-cart" role="menu">
+                                @foreach (var prod in currentCart)
+                                {
+                                    <li>
+                                        <span class="item">
+                                            <span class="item-left">
+                                                <img src="@prod.Product.ProductImage" alt="" />
+                                                <span class="item-info">
+                                                    <span>@prod.Product.ProductName <text style="font-size: smaller;">(x</text><text style="font-size: smaller;">@prod.Quantity)</text></span>
+                                                    <span style="font-weight: bold;">@prod.Product.Price.ToString("#0.00") €</span>
+                                                </span>
+                                            </span>
+                                            <span class="item-right">
+                                                @*<button class="btn btn-sm btn-danger fa-pull-right">x</button>*@
+                                                <a href="@Url.Action("RemoveFromCart","Cart", new { productId = prod.Product.ProductId })"><i class="fas fa-times fa-1x text-danger mr-1"></i></a>
+                                            </span>
+                                        </span>
+                                    </li>
+
+                                    @*<li style="font-size: small;">@prod.Product.ProductName <i class="fas fa-times"></i><br /><sup style="font-size: small;">x&nbsp;@prod.Quantity</sup></li>*@
+                                }
+                                <li class="dropdown-divider"></li>
+                                <li class="text-right font-weight-bold mr-2 mb-1 text-secondary">Total price: @totalSum.ToString("#0.00") €</li>
+                                <li><a class="dropdown-item text-center bg-primary text-white" href="@Url.Action("Cart","Cart", new { })">View Cart</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nav-menus">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a class="nav-link active" href="@Url.Action("Index","Home")">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+        <footer class="border-top footer text-muted">
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="footer-pad">
+                                <h4>Heading 1</h4>
+                                <ul class="list-unstyled">
+                                    <li><a href="#"></a></li>
+                                    <li><a href="#">News and updates</a></li>
+                                    <li><a href="#">Payment methods</a></li>
+                                    <li><a href="#">Shipment info</a></li>
+                                    <li><a href="#">Forms</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="footer-pad">
+                                <h4>Heading 2</h4>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">Support</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">FAQs</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="footer-pad">
+                                <h4>Heading 3</h4>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">Company</a></li>
+                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="#">Careers</a></li>
+                                    <li>
+                                        <a href="#"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h4>Follow Us</h4>
+                            <ul class="social-network social-circle">
+                                <li><a href="#" class="icoFacebook" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fab fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 copy">
+                            <div class="text-center">
+                                <p>&copy; 2021 - StoreApp - <a href="https://www.youtube.com/watch?v=sB8NcPGvfUk&list=PLyYDGDUwrQY1gkzCmxUT-LQaDhxg2EySR&index=2&ab_channel=abctutorial">Tutorial</a></p>
+                                <p><a href="https://codepen.io/NamiqNamaz/pen/QZYyEq">Footer tutorial</a></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        @RenderSection("Scripts", required: false)
+    </body>
+</html>

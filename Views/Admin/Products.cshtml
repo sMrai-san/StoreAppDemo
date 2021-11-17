@@ -1,0 +1,70 @@
+﻿@model IEnumerable<StoreApp.Data.DatabaseModel.Products>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="@Url.Action("Dashboard","Admin")">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                        </ol>
+                    </nav>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                <h6 class="m-0 font-weight-bold text-primary">@ViewData["Title"]</h6>
+                            </div>
+                            <div class="col-auto">
+                                <a href="../Admin/AddProduct" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp;Add New</a>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Index</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Index</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+
+                                            @foreach(var item in Model)
+                                            {
+                                            <tr>
+                                                <td>@item.ProductId</td>
+                                                <td>@item.ProductName</td>
+                                                <td>@item.Quantity</td>
+                                                <td>@item.Price</td>
+                                                <td><a href="@Url.Action("UpdateProduct","Admin", new { id = item.ProductId })">Edit</a></td>
+                                            </tr>
+                                            }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->

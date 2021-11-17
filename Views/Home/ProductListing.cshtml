@@ -1,0 +1,83 @@
+﻿@model StoreApp.Models.Home.HomeIndexViewModel
+@{ ViewData["Title"] = "Home";
+    Layout = "~/Pages/Shared/_Layout.cshtml"; }
+
+
+
+<!--SEARCH-->
+
+<div class=""><h2 style="color: #000;">Search Product / Category</h2></div>
+
+@if (string.IsNullOrEmpty(ViewBag.searchContainer))
+{
+<form asp-controller="Home" asp-action="Index" method="get">
+    <div class="input-group mb-3">
+        <input type="text" onfocus=" let value = this.value; this.value = null; this.value=value" placeholder="Enter keyword(s)" name="search" id="search" class=" form-control" />
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+    </div>
+</form> }
+else
+{
+<form asp-controller="Home" asp-action="Index" method="get">
+    <div class="input-group mb-3">
+        <input type="text" onfocus=" let value = this.value; this.value = null; this.value=value" value="@ViewBag.searchContainer" name="search" id="search" class=" form-control" />
+        <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+    </div>
+</form>}
+
+<!--PRODUCT LISTING-->
+
+<div id="myProducts">
+    <div class="row row-cols-1 row-cols-md-2">
+
+        @foreach (var item in Model.ListOfProducts)
+        {
+<div class="col-4 mb-4">
+    <div class="card">
+        @{if (item.IsFeatured == true)
+            { <h3><span class="badge badge-secondary notify-badge">New</span></h3> }
+            else
+            { <div style="height: 34px; margin-bottom: 8px;"></div>}
+        }
+        <img class="card-img-top" src="~/Content/ProductImages/@item.ProductImage" alt="Card image cap" style="width: 200px; height: 150px; object-fit: scale-down;">
+        <div class="card-body" style="height: 200px">
+            <hr />
+            <h5 class="card-title">@item.ProductName</h5>
+            <p class="card-text">@item.Description</p>
+            <a href="#" class="btn btn-primary">View product</a>
+        </div>
+    </div>
+</div>}
+    </div>
+
+</div>
+
+@{ var prevDisabled = Model.PreviousDisabled ? "disabled" : "";
+    var nextDisabled = Model.NextDisabled ? "disabled" : ""; }
+
+@if (!string.IsNullOrEmpty(ViewBag.searchContainer) && Model.ListOfProducts.Count() > 0)
+{
+<div>
+    @Html.ActionLink("Previous", "Index", "Home", new { search = ViewBag.searchContainer != null ? ViewBag.searchContainer : null, pageNumber = ViewBag.pageN != null ? ViewBag.pageN - 1 : 1 }, new { @class = "mt-2 p-2 btn btn-primary btn-sm " + prevDisabled })
+    @Html.ActionLink("Next", "Index", "Home", new { search = ViewBag.searchContainer != null ? ViewBag.searchContainer : null, pageNumber = ViewBag.pageN != null ? ViewBag.pageN + 1 : 1 }, new { @class = "mt-2 ml-2 p-2 btn btn-primary btn-sm " + nextDisabled })
+</div>}
+
+@section scripts{
+    <script>    
+        document.getElementById("search").focus()
+        /*Blargh, took me 1,5 hours to achieve this...sry coding gods, time well spent!*/
+        /*Smooth scrolling whenever there is a value in search input*/
+        if (document.getElementById("search").value.length != 0) {
+            smoothScroll();
+        }
+        function smoothScroll() {
+            document
+                .getElementById("myProducts")
+                .scrollIntoView({ behavior: "instant" });
+        }
+    </script>
+}
