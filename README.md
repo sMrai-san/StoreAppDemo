@@ -30,7 +30,7 @@ https://www.c-sharpcorner.com/article/set-default-value-to-dropdown-list-from-da
 
 Static ImageDir:
 https://docs.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-5.0
-Startup.cs------>
+##### Startup.cs:
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(
